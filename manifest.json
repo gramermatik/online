@@ -1,0 +1,11 @@
+{
+  "name": "Gramermatik Online",
+  "short_name": "Gramermatik",
+  "description": "Çubuğu plakaya tak, İngilizce konuş.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f1e7",
+  "theme_color": "#d62828",
+  "lang": "tr",
+  "icons": [{ "src": "ikon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
