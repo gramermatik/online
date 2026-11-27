@@ -78,6 +78,9 @@ nav.alt button i{display:block;font-style:normal;font-size:1.4rem}
 .cubuk-sec .ad{flex:1;min-width:0;text-align:center;font-weight:700;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cumle{flex:none;background:var(--kart);border-radius:var(--yuvarlak);padding:.8rem 1rem;margin-top:.6rem;border:1px solid var(--cizgi);box-shadow:0 -6px 20px rgba(0,0,0,.08)}
 .cumle .en{font-size:clamp(1.25rem,5.5vw,1.7rem);font-weight:800;overflow-wrap:anywhere}
+.gunluk{font-size:.95rem;font-weight:700;color:#2a7d4f;margin-top:.15rem}
+.gunluk:empty{display:none}
+.gunluk span{font-weight:600;color:var(--soluk)}
 .cumle .tr{font-size:clamp(1rem,4.4vw,1.3rem);color:var(--soluk);margin-top:.2rem;overflow-wrap:anywhere}
 .dugmeler{display:flex;gap:.5rem;margin-top:.7rem}
 .btn{border-radius:12px;padding:.6rem .9rem;font-weight:700;font-size:.95rem;cursor:pointer;background:var(--zemin);color:var(--yazi);border:1px solid var(--cizgi);white-space:nowrap;min-width:0}
@@ -257,6 +260,7 @@ nav.alt button i{display:block;font-style:normal;font-size:1.4rem}
     </div>
     <div class="cumle">
       <div class="en" id="cEn"></div>
+      <div class="gunluk" id="cGunluk"></div>
       <div class="tr" id="cTr"></div>
       <div class="ipucu" id="cIpucu"></div>
       <div class="dugmeler">
@@ -280,6 +284,7 @@ nav.alt button i{display:block;font-style:normal;font-size:1.4rem}
       <div class="metin" id="qMetin"></div>
     </div>
     <div class="secenekler" id="qSec"></div>
+    <div class="gunluk ipucu gizli" id="qGunluk" style="border-left-color:#2a9d5c"></div>
     <div class="ipucu gizli" id="qIpucu"></div>
     <div class="dugmeler"><button class="btn" id="qDinle">🔊 Dinle</button><button class="btn ana gizli" id="qSonraki" style="flex:1">Sonraki ▶</button></div>
   </section>

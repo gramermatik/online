@@ -159,3 +159,21 @@ function cevapKontrol(a, yazilan){
   }
   return { durum: "yanlis", eslesen: null, liste };
 }
+
+// "Günlük konuşmada" notu: kutunun öğretim kalıbını korur, doğal/kısa hâlini de gösterir.
+// I did go → I went · Who did go? → Who went? · I am going → I'm going ...
+const KISA = [
+  [/^I am /, "I'm "], [/^I will not /, "I won't "], [/^I will /, "I'll "],
+  [/^It is not /, "It isn't "], [/^It is /, "It's "], [/^It was not /, "It wasn't "],
+  [/^It will not /, "It won't "], [/^It will /, "It'll "], [/ cannot /, " can't "], [/ could not /, " couldn't "],
+  [/^There is not /, "There isn't "], [/^There is /, "There's "], [/^There was not /, "There wasn't "],
+  [/^There will not /, "There won't "],
+];
+function gunluk(k, s, w){
+  const en = cumle(k, s, w).en;
+  if (k === "fiil" && s === 3) return { etiket: "Günlük konuşmada", metin: `I ${v2(w.en)}.` };
+  if (k === "soru" && s === 12) return { etiket: "Günlük konuşmada", metin: `Who ${v2(w.en)}?` };
+  let kisa = en;
+  for (const [r, y] of KISA) kisa = kisa.replace(r, y);
+  return kisa !== en ? { etiket: "Kısaca", metin: kisa } : null;
+}

@@ -30,6 +30,8 @@ function sekmeleriCiz(){
 }
 $("sekmeler").onclick = e => { const k = e.target.dataset.k; if(!k) return; durum.plaka=k; durum.satir=Math.min(durum.satir, PLAKALAR[k].satirlar.length-1); ciz(); };
 
+const gunlukHtml = g => g ? `💬 <span>${g.etiket}:</span> ${g.metin}` : "";
+function gunlukGoster(){ const a = soruV.a, h = gunlukHtml(gunluk(a.k, a.s, PLAKALAR[a.k].cubuk()[a.w])); $("qGunluk").innerHTML = h; $("qGunluk").classList.toggle("gizli", !h); }
 function ciz(){
   const p = PLAKALAR[durum.plaka], [r1,r2] = RENK[p.renk];
   document.documentElement.style.setProperty("--plaka", r1);
@@ -46,6 +48,7 @@ function ciz(){
   const c = cumle(durum.plaka, durum.satir, w);
   $("cEn").textContent = c.en;
   $("cTr").textContent = c.tr;
+  $("cGunluk").innerHTML = gunlukHtml(gunluk(durum.plaka, durum.satir, w));
   $("cIpucu").textContent = "💡 " + IPUCU[durum.plaka][durum.satir];
   depo.koy("durum", durum);
   sigdir();
@@ -109,7 +112,7 @@ function rastgeleCumle(){
   return TUM_CUMLELER[rastgele(TUM_CUMLELER.length)];
 }
 function yeniSoru(){
-  $("qIpucu").classList.add("gizli");
+  $("qIpucu").classList.add("gizli"); $("qGunluk").classList.add("gizli");
   if(mod==="tekrar" && !yanlislar.length){
     soruV = null;
     $("qEtiket").textContent = "";
@@ -159,6 +162,7 @@ $("qSec").onclick = e => {
   depo.koy("skor",skor); puanCiz(); kaydet();
   $("qIpucu").textContent = "💡 " + IPUCU[soruV.a.k][soruV.a.s];
   $("qIpucu").classList.remove("gizli");
+  gunlukGoster();
   soyle(soruV.dogru.en,"en-US");
   $("qSonraki").classList.remove("gizli");
 };
@@ -185,6 +189,7 @@ function yazKontrol(){
   depo.koy("skor",skor); puanCiz(); kaydet();
   $("qIpucu").textContent = "💡 " + IPUCU[soruV.a.k][soruV.a.s];
   $("qIpucu").classList.remove("gizli");
+  gunlukGoster();
   soyle(soruV.dogru.en,"en-US");
   $("qSonraki").classList.remove("gizli");
   $("yazKontrol").focus();
