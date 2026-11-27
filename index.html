@@ -112,6 +112,14 @@ nav.alt button i{display:block;font-style:normal;font-size:1.4rem}
 .secenekler button.dogru{background:#2a9d5c;color:#fff;border-color:#2a9d5c}
 .secenekler button.yanlis{background:var(--kirmizi);color:#fff;border-color:var(--kirmizi)}
 #qIpucu{border-left-color:var(--kirmizi);margin-top:.8rem}
+.yaz-form{display:flex;flex-direction:column;gap:.5rem;margin-top:.9rem}
+.yaz-form input{width:100%;font-size:1.15rem;font-weight:700;padding:.8rem .9rem;border-radius:12px;border:2px solid var(--cizgi);background:var(--kart);color:var(--yazi)}
+.yaz-form input:focus{outline:none;border-color:var(--yazi)}
+.yaz-form input.dogru{border-color:#2a9d5c;background:#2a9d5c1a}
+.yaz-form input.yanlis{border-color:var(--kirmizi);background:#d628281a}
+.yaz-sonuc{background:var(--kart);border:1px solid var(--cizgi);border-radius:12px;padding:.75rem .9rem;line-height:1.5}
+.yaz-sonuc b{display:block;margin-bottom:.2rem}
+.yaz-sonuc ul{margin:.3rem 0 0;padding-left:1.2rem;color:var(--soluk)}
 .bos{text-align:center;color:var(--soluk);padding:1.5rem .5rem}
 
 /* ilerleme */
@@ -263,6 +271,7 @@ nav.alt button i{display:block;font-style:normal;font-size:1.4rem}
     <div class="mod">
       <button class="btn aktif" data-mod="tr">Türkçe → İngilizce</button>
       <button class="btn" data-mod="en">İngilizce → Türkçe</button>
+      <button class="btn" data-mod="yaz">✍️ Yazarak</button>
     </div>
     <button class="btn tekrar-btn" data-mod="tekrar" id="tekrarBtn">🔁 Yanlışlarımı tekrar et <span id="yanlisSay">0</span></button>
     <div class="puan"><div><b id="pDogru">0</b>doğru</div><div><b id="pSeri">0</b>seri</div><div><b id="pRekor">0</b>rekor</div></div>
@@ -302,6 +311,7 @@ nav.alt button i{display:block;font-style:normal;font-size:1.4rem}
 <script src="ayar.js"></script>
 <script src="veri.js"></script>
 <script src="gramer.js"></script>
+<script src="cevaplar.js"></script>
 <script src="kod.js"></script>
 <script src="bulut.js"></script>
 <script src="ekle.js"></script>

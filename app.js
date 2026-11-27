@@ -119,6 +119,16 @@ function yeniSoru(){
     return;
   }
   const a = rastgeleCumle(), p = PLAKALAR[a.k], dogru = cumle(a.k,a.s,p.cubuk()[a.w]);
+  if(mod==="yaz"){
+    soruV = {dogru, sec:[], a, yaz:true};
+    $("qEtiket").textContent = "Bu cümleyi İngilizce yaz";
+    $("qMetin").textContent = dogru.tr;
+    $("qSec").innerHTML = `<form class="yaz-form" id="yazForm" autocomplete="off"><input id="yazGir" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="İngilizcesini yaz…" aria-label="Cevabın"><button class="btn ana" type="submit" id="yazKontrol">Kontrol et</button></form><div id="yazSonuc"></div>`;
+    $("qSonraki").classList.add("gizli");
+    $("yazForm").onsubmit = e => { e.preventDefault(); yazKontrol(); };
+    setTimeout(()=>$("yazGir").focus(), 50);
+    return;
+  }
   const set = new Map([[dogru.en, dogru]]);
   let deneme = 0;
   while(set.size<4 && deneme++<50){
@@ -139,6 +149,7 @@ function yeniSoru(){
 }
 function puanCiz(){ $("pDogru").textContent=skor.dogru; $("pSeri").textContent=skor.seri; $("pRekor").textContent=skor.rekor; }
 $("qSec").onclick = e => {
+  if(soruV && soruV.yaz) return;
   const b = e.target.closest("button"); if(!b || !$("qSonraki").classList.contains("gizli")) return;
   const c = soruV.sec[+b.dataset.i], ok = c.en===soruV.dogru.en;
   [...$("qSec").children].forEach((x,i)=>{ if(soruV.sec[i].en===soruV.dogru.en) x.classList.add("dogru"); });
@@ -151,6 +162,33 @@ $("qSec").onclick = e => {
   soyle(soruV.dogru.en,"en-US");
   $("qSonraki").classList.remove("gizli");
 };
+// yazarak cevap: o anlama gelen tüm doğru çeviriler kabul edilir (cevaplar.js)
+const kacis = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);
+const noktala = (c, ornek) => c + (ornek.endsWith("?") ? "?" : ".");
+function yazKontrol(){
+  const g = $("yazGir");
+  if(!soruV || !soruV.yaz || !$("qSonraki").classList.contains("gizli")) return yeniSoru();
+  if(!g.value.trim()){ g.focus(); return; }
+  const s = cevapKontrol(soruV.a, g.value), ok = s.durum !== "yanlis", key = anahtar(soruV.a);
+  const digerleri = s.liste.filter(c => c !== s.eslesen).map(c => noktala(c, soruV.dogru.en));
+  g.classList.add(ok ? "dogru" : "yanlis"); g.readOnly = true;
+  $("yazKontrol").textContent = "Sonraki ▶";
+  let html;
+  if(s.durum === "dogru") html = `<b>✅ Doğru!</b>`;
+  else if(s.durum === "yazim") html = `<b>✅ Doğru, küçük bir yazım hatası var:</b>${kacis(noktala(s.eslesen, soruV.dogru.en))}`;
+  else html = `<b>❌ Doğrusu:</b>${kacis(soruV.dogru.en)}`;
+  const kalan = s.durum === "yanlis" ? digerleri.filter(c => c !== soruV.dogru.en) : digerleri;
+  if(kalan.length) html += `<div style="margin-top:.4rem;font-size:.92rem">Bunlar da doğru:</div><ul>${kalan.map(c=>`<li>${kacis(c)}</li>`).join("")}</ul>`;
+  $("yazSonuc").innerHTML = `<div class="yaz-sonuc">${html}</div>`;
+  if(ok){ skor.dogru++; skor.seri++; skor.rekor=Math.max(skor.rekor,skor.seri); ogrenilen.add(key); yanlislar = yanlislar.filter(x=>x!==key); }
+  else { skor.seri=0; ogrenilen.delete(key); if(!yanlislar.includes(key)) yanlislar.push(key); if(navigator.vibrate) navigator.vibrate(120); }
+  depo.koy("skor",skor); puanCiz(); kaydet();
+  $("qIpucu").textContent = "💡 " + IPUCU[soruV.a.k][soruV.a.s];
+  $("qIpucu").classList.remove("gizli");
+  soyle(soruV.dogru.en,"en-US");
+  $("qSonraki").classList.remove("gizli");
+  $("yazKontrol").focus();
+}
 $("qSonraki").onclick = yeniSoru;
 $("qDinle").onclick = () => soruV && (mod==="en" ? soyle(soruV.dogru.en,"en-US") : soyle(soruV.dogru.tr,"tr-TR"));
 const modDugmeleri = document.querySelectorAll("[data-mod]");
