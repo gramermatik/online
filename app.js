@@ -224,9 +224,10 @@ function ilerlemeCiz(){
 document.querySelectorAll("nav.alt button").forEach(b=>b.onclick=()=>{
   const s = b.dataset.sayfa;
   document.querySelectorAll("nav.alt button").forEach(x=>x.classList.toggle("aktif",x===b));
-  ["kutu","alistirma","ilerleme"].forEach(id=>$(id).classList.toggle("gizli", id!==s));
+  ["kutu","alistirma","kelime","ilerleme"].forEach(id=>$(id).classList.toggle("gizli", id!==s));
   if(s==="alistirma" && !soruV) yeniSoru();
   if(s==="ilerleme") ilerlemeCiz();
+  if(s==="kelime" && window.kelimeSayfasi) kelimeSayfasi();
 });
 kaydet();
 

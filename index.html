@@ -123,6 +123,17 @@ nav.alt button i{display:block;font-style:normal;font-size:1.4rem}
 .yaz-sonuc{background:var(--kart);border:1px solid var(--cizgi);border-radius:12px;padding:.75rem .9rem;line-height:1.5}
 .yaz-sonuc b{display:block;margin-bottom:.2rem}
 .yaz-sonuc ul{margin:.3rem 0 0;padding-left:1.2rem;color:var(--soluk)}
+.kelime-ust{display:flex;gap:.5rem;align-items:center}
+.kelime-ust .mod{flex:1;margin:.4rem 0 .8rem}
+.sv{display:inline-block;font-weight:900;font-size:.72rem;padding:1px .45rem;border-radius:6px;color:#fff;background:#888;vertical-align:1px}
+.sv-B1{background:#2a9d5c}.sv-B2{background:#e09f1f}.sv-C1{background:var(--kirmizi)}
+.nokta{color:#2a9d5c;letter-spacing:2px;margin-left:.3rem}
+.kelime-uyari{background:#d628281a;color:var(--kirmizi);font-weight:800;font-size:.88rem;border-radius:10px;padding:.35rem .6rem;margin-bottom:.5rem}
+.kelime-ornek{border-left-color:#2a9d5c;margin-top:.8rem}
+.kelime-ornek .orn{margin-top:.35rem;font-style:italic;font-weight:700}
+.kelime-ornek small{display:block;color:var(--soluk)}
+.kelime-ornek .kn{margin-top:.4rem;font-weight:700}
+#kelime{max-width:680px;margin:0 auto}
 .bos{text-align:center;color:var(--soluk);padding:1.5rem .5rem}
 
 /* ilerleme */
@@ -289,6 +300,24 @@ nav.alt button i{display:block;font-style:normal;font-size:1.4rem}
     <div class="dugmeler"><button class="btn" id="qDinle">🔊 Dinle</button><button class="btn ana gizli" id="qSonraki" style="flex:1">Sonraki ▶</button></div>
   </section>
 
+  <section id="kelime" class="gizli">
+    <div class="kelime-ust">
+      <div class="mod sv-sec">
+        <button class="btn aktif" data-sv="hepsi">Tümü</button><button class="btn" data-sv="B1">B1</button><button class="btn" data-sv="B2">B2</button><button class="btn" data-sv="C1">C1</button>
+      </div>
+      <button class="yardim" id="kBilgiBtn" aria-label="Kelime alıştırması nasıl çalışır?">!</button>
+    </div>
+    <button class="btn tekrar-btn" id="kYanlisBtn">🔁 Yanlış yaptığım kelimeler <span id="kYanlisSay">0</span></button>
+    <div class="puan"><div><b id="kOgren">0</b>öğrenildi</div><div><b id="kVade">0</b>bugün tekrar</div></div>
+    <div class="soru-kart">
+      <div class="kelime-uyari gizli" id="kUyari">⚠️ Bunu daha önce yanlış yapmıştın</div>
+      <div class="etiket"><span class="sv" id="kSeviye"></span> Bu kelimenin İngilizcesi hangisi? <span class="nokta" id="kIlerleme"></span></div>
+      <div class="metin" id="kMetin"></div>
+    </div>
+    <div class="secenekler" id="kSec"></div>
+    <div id="kSonuc"></div>
+    <div class="dugmeler"><button class="btn" id="kDinle">🔊 Dinle</button><button class="btn ana gizli" id="kSonraki" style="flex:1">Sonraki ▶</button></div>
+  </section>
   <section id="ilerleme" class="gizli">
     <div class="ozet">
       <div class="halka" id="halka"><b id="genelYuzde">%0</b><small>öğrenildi</small></div>
@@ -301,9 +330,21 @@ nav.alt button i{display:block;font-style:normal;font-size:1.4rem}
   </section>
 </main>
 
+<div class="bilgi kapan" id="kOnemli" role="dialog" aria-labelledby="kOnemliBaslik"><div class="bilgi-kart">
+  <h2 id="kOnemliBaslik">⚠️ Önemli!</h2>
+  <ol>
+    <li><span style="background:var(--sari)">1</span><div>Bu bölümdeki kelimeler <b>B1, B2 ve C1</b> seviyesindedir, yani orta-üst seviye. İlk başta zorlanman normal.</div></li>
+    <li><span style="background:var(--mavi)">2</span><div>Kelimeler bir kerede ezberlenmez. Bir kelimenin <b>öğrenildi</b> sayılması için onu <b>3 kez, farklı zamanlarda</b> doğru bilmelisin: bugün, 1 gün sonra ve 3 gün sonra. ●●● işaretleri ilerlemeni gösterir.</div></li>
+    <li><span style="background:var(--kirmizi)">3</span><div>Yanlış yaptığın kelimeler <b>hafızada tutulur</b>. Tekrar karşına çıktığında “Bunu daha önce yanlış yapmıştın” uyarısı görürsün. <b>🔁 Yanlış yaptığım kelimeler</b> ile istediğin kadar tekrar çözebilirsin.</div></li>
+    <li><span style="background:var(--sari)">4</span><div>Her cevaptan sonra kelimenin <b>örnek cümlesini</b> oku ve sesli dinle. Cümle içinde görmek ezberi çok kolaylaştırır.</div></li>
+    <li><span style="background:var(--mavi)">5</span><div>Her gün <b>10-15 dakika</b> düzenli çalış. “Bugün tekrar” sayısı sıfırlanana kadar devam et.</div></li>
+  </ol>
+  <button class="btn ana" id="kOnemliKapat" style="width:100%;margin-top:1rem;padding:.8rem;font-weight:900">Anladım, başlayalım</button>
+</div></div>
 <nav class="alt">
   <button class="aktif" data-sayfa="kutu"><i>🧰</i>Kutu</button>
   <button data-sayfa="alistirma"><i>🎯</i>Alıştırma</button>
+  <button data-sayfa="kelime"><i>📚</i>Kelime</button>
   <button data-sayfa="ilerleme"><i>📈</i>İlerleme</button>
 </nav>
 
@@ -317,6 +358,7 @@ nav.alt button i{display:block;font-style:normal;font-size:1.4rem}
 <script src="veri.js"></script>
 <script src="gramer.js"></script>
 <script src="cevaplar.js"></script>
+<script src="kelimeler.js"></script>
 <script src="kod.js"></script>
 <script src="bulut.js"></script>
 <script src="ekle.js"></script>

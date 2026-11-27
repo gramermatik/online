@@ -1,7 +1,7 @@
 // Giriş, erişim kodu ve ilerlemenin buluta kaydı. Uygulamanın kendisi (app.js) erişim doğrulanınca yüklenir.
 (function(){
   const $ = id => document.getElementById(id);
-  const ANAHTARLAR = ["durum", "skor", "ogren", "yanlis"];
+  const ANAHTARLAR = ["durum", "skor", "ogren", "yanlis", "kelime", "kelimeBilgi"];
   const goster = ad => ["adimYukle","adimGiris","adimKod"].forEach(x => $(x).classList.toggle("gizli", x !== ad));
   const mesaj = t => { $("genelMesaj").textContent = t || ""; };
 
@@ -32,7 +32,7 @@
     if (!error && data) yereleYaz(data.veri); // buluttaki kayıt esastır
     $("kilit").classList.add("gizli");
     const s = document.createElement("script"); s.src = "app.js";
-    s.onload = () => { basladi = true; if (!data) gonder(); };
+    s.onload = () => { const k = document.createElement("script"); k.src = "kelime-app.js"; document.body.appendChild(k); basladi = true; if (!data) gonder(); };
     document.body.appendChild(s);
   }
 
