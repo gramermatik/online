@@ -99,7 +99,12 @@
     ustCiz();
   };
   $("kSonraki").onclick = yeniKelime;
-  $("kDinle").onclick = () => kSoru && soyle(kSoru.k.en, "en-US");
+  // Cevaplamadan önce Türkçe soruyu okur (cevabı söylemesin); cevaptan sonra İngilizce kelimeyi okur.
+  $("kDinle").onclick = () => {
+    if (!kSoru) return;
+    const cevaplandi = !$("kSonraki").classList.contains("gizli");
+    cevaplandi ? soyle(kSoru.k.en, "en-US") : soyle(kSoru.k.tr, "tr-TR");
+  };
   document.querySelectorAll("[data-sv]").forEach(b => b.onclick = () => {
     seviye = b.dataset.sv; kmod = "normal";
     document.querySelectorAll("[data-sv]").forEach(x => x.classList.toggle("aktif", x === b));
