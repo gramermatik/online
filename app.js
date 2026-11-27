@@ -68,7 +68,51 @@ if(document.fonts) document.fonts.ready.then(sigdir); // yazı tipi yüklenince 
 function ipucuOku(){ const a = $("plakaAlan"); $("asagi").classList.toggle("yok", a.scrollTop + a.clientHeight >= a.scrollHeight - 6); }
 $("plakaAlan").addEventListener("scroll", ipucuOku, {passive:true});
 window.addEventListener("resize", ipucuOku);
+// --- Çubuğu parmakla yukarı/aşağı sürükleme (gerçek kutudaki gibi yuvada kaydırma) ---
+let surukle = null, surukledi = false;
+function satirGoster(i){
+  // tüm plakayı yeniden çizmeden çubuğu ve cümleyi günceller (sürükleme bozulmasın)
+  const p = PLAKALAR[durum.plaka], w = p.cubuk()[durum.kelime[durum.plaka]];
+  durum.satir = i;
+  document.querySelectorAll("#plaka .satir").forEach(el => el.classList.toggle("secili", +el.dataset.i === i));
+  $("cubuk").style.setProperty("--i", i);
+  const c = cumle(durum.plaka, i, w);
+  $("cEn").textContent = c.en; $("cTr").textContent = c.tr;
+  $("cGunluk").innerHTML = gunlukHtml(gunluk(durum.plaka, i, w));
+  $("cIpucu").textContent = "💡 " + IPUCU[durum.plaka][i];
+  const sat = document.querySelector(`#plaka .sol .satir[data-i="${i}"]`);
+  if (sat) sat.scrollIntoView({ block: "nearest" });
+}
+$("plaka").addEventListener("pointerdown", e => {
+  const c = e.target.closest(".cubuk"); if (!c) return;
+  const sat = document.querySelector("#plaka .satir");
+  surukle = { y: e.clientY, bas: durum.satir, h: sat ? sat.getBoundingClientRect().height : 30, id: e.pointerId };
+  surukledi = false;
+  c.setPointerCapture(e.pointerId);
+});
+$("plaka").addEventListener("pointermove", e => {
+  if (!surukle || e.pointerId !== surukle.id) return;
+  const fark = e.clientY - surukle.y;
+  if (Math.abs(fark) > 6) surukledi = true;
+  if (!surukledi) return;
+  e.preventDefault();
+  const p = PLAKALAR[durum.plaka], w = p.cubuk()[durum.kelime[durum.plaka]], n = p.satirlar.length;
+  let hedef = Math.max(0, Math.min(n - 1, surukle.bas + Math.round(fark / surukle.h)));
+  // kapalı (anlamsız) satıra gelirse sürükleme yönündeki ilk uygun satıra atla
+  const yon = hedef >= durum.satir ? 1 : -1;
+  while (hedef >= 0 && hedef < n && !uygun(durum.plaka, hedef, w)) hedef += yon;
+  if (hedef >= 0 && hedef < n && hedef !== durum.satir) { satirGoster(hedef); if (navigator.vibrate) navigator.vibrate(8); }
+});
+const surukleBitir = e => {
+  if (!surukle || e.pointerId !== surukle.id) return;
+  const degisti = durum.satir !== surukle.bas;
+  surukle = null;
+  if (surukledi && degisti) { depo.koy("durum", durum); soyle($("cEn").textContent, "en-US"); }
+};
+$("plaka").addEventListener("pointerup", surukleBitir);
+$("plaka").addEventListener("pointercancel", surukleBitir);
 $("plaka").onclick = e => {
+  if (surukledi) { surukledi = false; return; } // sürükleme sonrası tıklama sayılmasın
   const s = e.target.closest(".satir");
   if(s && s.classList.contains("kapali")) return;
   if(s){ durum.satir = +s.dataset.i; ciz(); soyle($("cEn").textContent,"en-US"); }

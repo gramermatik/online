@@ -1,5 +1,5 @@
 // Önce internetten al (güncel kalsın), yoksa önbellekten aç. Supabase istekleri önbelleğe alınmaz.
-const CACHE = "gramermatik-online-v6";
+const CACHE = "gramermatik-online-v7";
 const DOSYALAR = ["./", "index.html", "app.js", "bulut.js", "ekle.js", "ayar.js", "veri.js", "gramer.js", "cevaplar.js", "kelimeler.js", "kelime-app.js", "kod.js", "manifest.json", "ikon.svg"];
 self.addEventListener("install", e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(DOSYALAR)).then(() => self.skipWaiting())));
 self.addEventListener("activate", e => e.waitUntil(caches.keys().then(k => Promise.all(k.filter(x => x !== CACHE).map(x => caches.delete(x)))).then(() => self.clients.claim())));
